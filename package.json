@@ -1,0 +1,33 @@
+{
+  "name": "message-managment-pocho-emai-service",
+  "version": "1.0.0",
+  "description": "Servicio para envio de mensaje de la APP MMP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start ecosystem.config.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "email",
+    "MMP",
+    "message",
+    "managment",
+    "pocho",
+    "nodejs",
+    "sequelize",
+    "nodemailer"
+  ],
+  "author": "Phillip Cabrera",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.9.2",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.12",
+    "nodemon": "^3.1.4",
+    "pm2": "^5.4.2",
+    "sequelize": "^6.37.1"
+  }
+}
