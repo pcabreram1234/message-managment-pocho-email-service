@@ -15,5 +15,12 @@ cron.schedule("*/1 * * * *", () => {
   });
 });
 
-// // Programa la tarea para manejar mensajes con error cada 10 minutos, comenzando 3 minutos después de la primera
-// cron.schedule("3-59/10 * * * *", () => {});
+// Tarea para auto-ping
+cron.schedule("*/5 * * * *", async () => {
+  try {
+    console.log("Enviando autoping...");
+    await fetch(process.env.SELF_URL);
+  } catch (error) {
+    console.error("Error al enviar autoping:", error.message);
+  }
+});
