@@ -22,7 +22,7 @@ const startServer = () => {
     cron.schedule("*/2 * * * *", async () => {
       try {
         console.log("Enviando autoping...");
-        await fetch(SELF_URL);
+        await fetch(process.env.SELF_URL);
       } catch (error) {
         console.error("Error al enviar autoping:", error.message);
       }

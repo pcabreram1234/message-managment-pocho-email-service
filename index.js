@@ -15,7 +15,7 @@ cron.schedule("*/1 * * * *", () => {
       console.log("Finalizada tarea: Manejar mensajes con error...");
     }, 60000);
   });
-});
+})
 
 // // Programa la tarea para manejar mensajes con error cada 10 minutos, comenzando 3 minutos después de la primera
 // cron.schedule("3-59/10 * * * *", () => {});
