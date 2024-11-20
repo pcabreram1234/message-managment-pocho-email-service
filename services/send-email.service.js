@@ -103,7 +103,7 @@ class SendEmailService {
   async retrySendEmail(message) {
     const { message_id, scheduled_date, recipient } = message;
 
-    const currentFailedMessage =
+    const currentFailedMessage =  
       await this.failedService.findOneMessageWithError({
         message_id: message_id,
         scheduled_date: scheduled_date,
@@ -135,7 +135,7 @@ class SendEmailService {
       // Enviar el correo de forma asincrónica
       const info = await transporter.sendMail({
         from: process.env.NODEMAILER_FROM, // Dirección del remitente
-        to: email, // Dirección de destino
+        to: recipient, // Dirección de destino
         subject: "Message Management Pocho", // Asunto del correo
         text: message.toString(), // Mensaje en texto plano
         html: emailTemplate,

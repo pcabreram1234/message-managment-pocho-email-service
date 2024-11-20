@@ -13,7 +13,7 @@ cron.schedule("*/1 * * * *", () => {
       console.log("Iniciando tarea: Manejar mensajes con error...");
       await sendErrorMessages();
       console.log("Finalizada tarea: Manejar mensajes con error...");
-    }, 60000);
+    }, 100);
   });
 })
 
