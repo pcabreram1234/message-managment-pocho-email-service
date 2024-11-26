@@ -23,6 +23,7 @@ const startServer = () => {
       try {
         console.log("Enviando autoping...");
         await fetch(process.env.SELF_URL);
+        await fetch(process.env.API_URL);
       } catch (error) {
         console.error("Error al enviar autoping:", error.message);
       }
