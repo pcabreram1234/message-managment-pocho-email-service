@@ -27,7 +27,7 @@ const startServer = () => {
       } catch (error) {
         console.error("Error al enviar autoping:", error.message);
       }
-    });
+    })
   });
 
   server.keepAliveTimeout = 120 * 1000;
