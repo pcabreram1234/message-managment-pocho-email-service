@@ -19,7 +19,7 @@ const startServer = () => {
   const server = app.listen(port, () => {
     console.log("Mi port " + port);
 
-    cron.schedule("*/30 * * * * *", async () => {
+    cron.schedule("*/30 * * * *", async () => {
       try {
         console.log("Enviando autoping...");
         await fetch(process.env.SELF_URL);
