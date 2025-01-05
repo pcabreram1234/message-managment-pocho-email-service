@@ -5,7 +5,7 @@ const { startServer } = require("./server");
 
 startServer()
 // Programa la tarea para enviar mensajes pendientes cada 15 minutos
-cron.schedule("*/15 * * * *", () => {
+cron.schedule("*/30 * * * * *", () => {
   console.log("Iniciando tarea: Enviar mensajes pendientes...");
   sendPendingMessages().then(() => {
     console.log("Finalizada tarea:  Enviar mensajes pendientes...");
