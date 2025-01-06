@@ -1,9 +1,7 @@
 const cron = require("node-cron");
 const { sendPendingMessages } = require("./jobs/sendPendingMessages");
 const { sendErrorMessages } = require("./jobs/handleErrorMessges");
-const { startServer } = require("./server");
 
-startServer()
 // Programa la tarea para enviar mensajes pendientes cada 15 minutos
 cron.schedule("*/30 * * * * *", () => {
   console.log("Iniciando tarea: Enviar mensajes pendientes...");
