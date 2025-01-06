@@ -3,7 +3,7 @@ const { sendPendingMessages } = require("./jobs/sendPendingMessages");
 const { sendErrorMessages } = require("./jobs/handleErrorMessges");
 
 // Programa la tarea para enviar mensajes pendientes cada 15 minutos
-cron.schedule("*/30 * * * * *", () => {
+cron.schedule("*/10 * * * *", () => {
   console.log("Iniciando tarea: Enviar mensajes pendientes...");
   sendPendingMessages().then(() => {
     console.log("Finalizada tarea:  Enviar mensajes pendientes...");
