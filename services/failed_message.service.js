@@ -1,14 +1,21 @@
 const { Op } = require("sequelize");
-const { models } = require("../libs/sequelize");
+// const { initSequelize } = require("../libs/sequelize");
 
 class FailedMessageService {
+
+  constructor(models) {
+    this.models = models;
+  }
   async findMessageWithErrors() {
-    const date = new Date();
-    const rta = await models.FailedMessage.findAll({
+    const d = new Date();
+    const rta = await this.models.FailedMessage.findAll({
       where: {
-        status: "Error",
+        status: { [Op.or]: ["Error", "Pending"] },
         next_retry_at: {
-          [Op.lte]: [date],
+          [Op.or]: [null, { [Op.lte]: [new Date(d.getTime() + (60000 * 20))] }],
+        },
+        attempts: {
+          [Op.lte]: 3,
         },
       },
       attributes: [
@@ -36,7 +43,7 @@ class FailedMessageService {
       message_id,
       recipient,
     } = data;
-    const rta = await models.FailedMessage.update(
+    const rta = await this.models.FailedMessage.update(
       {
         status: status,
         attempts: attempts ?? null,
@@ -57,7 +64,7 @@ class FailedMessageService {
 
   async findOneMessageWithError(data) {
     const { message_id, scheduled_date, recipient } = data;
-    const rta = await models.FailedMessage.findOne({
+    const rta = await this.models.FailedMessage.findOne({
       where: {
         message_id: message_id,
         scheduled_date: scheduled_date,
@@ -70,7 +77,19 @@ class FailedMessageService {
   }
 
   async createNewMessageWithError(data) {
-    const rta = await models.FailedMessage.create(data);
+    const rta = await this.models.FailedMessage.create(data);
+    return rta;
+  }
+
+  async deleteFailedMessage(data) {
+    const { message_id, scheduled_date, recipient } = data;
+    const rta = await this.models.FailedMessage.destroy({
+      where: {
+        message_id: message_id,
+        scheduled_date: scheduled_date,
+        recipient: recipient,
+      },
+    });
     return rta;
   }
 }

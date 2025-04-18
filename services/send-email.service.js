@@ -15,14 +15,9 @@ class SendEmailService {
     this.next_retry_at.setHours(this.next_retry_at.getHours() + 1);
   }
   async sendEmail(message) {
-    const { message_id, scheduled_date, recipient, message_content, id } =
+    const { recipient, message_content, } =
       message;
-    const currentFailedMessage =
-      await this.failedService.findOneMessageWithError({
-        message_id: message_id,
-        scheduled_date: scheduled_date,
-        recipient: recipient,
-      });
+
     // Crear el transportador con la configuración necesaria
     const transporter = nodemailer.createTransport({
       port: process.env.NODEMAILER_PORT,
@@ -59,51 +54,51 @@ class SendEmailService {
       });
 
       // Determinar el resultado basado en la respuesta del envío
-      let resp;
-      if (info.messageId) {
-        resp = "sended";
-        await this.messageConfigService.updateMessagePending(id, resp);
-        console.log("Message sent: %s", info.messageId);
-      } else {
-        resp = "error";
-        console.error("Error en el envío del mensaje");
-      }
+      // let resp;
+      // if (info.messageId) {
+      //   resp = "sended";
+      //   await this.messageConfigService.updateMessagePending(id, resp);
+      //   console.log("Message sent: %s", info.messageId);
+      // } else {
+      //   resp = "error";
+      //   console.error("Error en el envío del mensaje");
+      // }
 
-      if (currentFailedMessage !== undefined && currentFailedMessage !== null) {
-        await this.failedService.updateFailedMessage({
-          status: "Sended",
-          attempts: parseInt(currentFailedMessage.attempts) + 1,
-          last_attempt_at: this.currentDate,
-          next_retry_at: this.next_retry_at,
-          error_message: null,
-          message_id: message_id,
-          recipient: recipient,
-          scheduled_date: scheduled_date,
-        });
-      }
+      // if (currentFailedMessage !== undefined && currentFailedMessage !== null) {
+      //   await this.failedService.updateFailedMessage({
+      //     status: "Sended",
+      //     attempts: parseInt(currentFailedMessage.attempts) + 1,
+      //     last_attempt_at: this.currentDate,
+      //     next_retry_at: this.next_retry_at,
+      //     error_message: null,
+      //     message_id: message_id,
+      //     recipient: recipient,
+      //     scheduled_date: scheduled_date,
+      //   });
+      // }
     } catch (error) {
       console.log(error);
-      await this.messageConfigService.updateMessagePending(id, "error");
+      // await this.messageConfigService.updateMessagePending(id, "error");
 
-      if (currentFailedMessage !== undefined && currentFailedMessage !== null) {
-        await this.failedService.updateFailedMessage({
-          status: "Error",
-          attempts: parseInt(currentFailedMessage.attempts) + 1,
-          last_attempt_at: this.currentDate,
-          next_retry_at: this.next_retry_at,
-          error_message: error?.message,
-          message_id: message_id,
-          recipient: recipient,
-          scheduled_date: scheduled_date,
-        });
-      }
+      // if (currentFailedMessage !== undefined && currentFailedMessage !== null) {
+      //   await this.failedService.updateFailedMessage({
+      //     status: "Error",
+      //     attempts: parseInt(currentFailedMessage.attempts) + 1,
+      //     last_attempt_at: this.currentDate,
+      //     next_retry_at: this.next_retry_at,
+      //     error_message: error?.message,
+      //     message_id: message_id,
+      //     recipient: recipient,
+      //     scheduled_date: scheduled_date,
+      //   });
+      // }
     }
   }
 
   async retrySendEmail(message) {
     const { message_id, scheduled_date, recipient } = message;
 
-    const currentFailedMessage =  
+    const currentFailedMessage =
       await this.failedService.findOneMessageWithError({
         message_id: message_id,
         scheduled_date: scheduled_date,

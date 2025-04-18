@@ -1,17 +1,21 @@
-const { models } = require("../libs/sequelize");
+// const { initSequelize } = require("../libs/sequelize");
 const { Op } = require("sequelize");
 
 class MessageConfigService {
+  constructor(models) {
+    this.models = models;
+  }
+
   async findMessagePending() {
-    const date = new Date();
-    const rta = await models.MessageConfig.findAll({
+    const rta = await this.models.MessageConfig.findAll({
       where: {
         status: "pending",
+        scheduled_date: { [Op.lte]: new Date() }
       },
       attributes: [
         "recipient",
         ["message", "message_content"],
-        "message_id",
+        "MessageId",
         "scheduled_date",
         "id",
       ],
@@ -26,12 +30,12 @@ class MessageConfigService {
     const delay = new Date(now.getTime() - 5 * 60000); // 5 minutos en milisegundos
 
     // Buscar mensajes con estado "error" y cuya scheduled_date esté entre la hora actual y el margen de atraso
-    const rta = await models.MessageConfig.findAll({
+    const rta = await this.models.MessageConfig.findAll({
       where: {
         status: "error",
         scheduled_date: {
           [Op.between]: [delay, now], // Rango entre el margen de atraso y la hora actual
-        },
+        }, attempts: { [Op.lt]: 3 }
       },
       attributes: [
         "recipient",
@@ -47,7 +51,7 @@ class MessageConfigService {
   }
 
   async updateMessagePending(id, status) {
-    const rta = await models.MessageConfig.update(
+    const rta = await this.models.MessageConfig.update(
       { status: status },
       { where: { id: id } }
     );
