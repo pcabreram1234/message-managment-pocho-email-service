@@ -2,7 +2,7 @@
 require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const { config } = require("../config/config");
-const { setupModels } = require("../db/models/index.js");
+const { setupModels } = require("../db/models/index");
 
 let sequelizeInstance = null;
 

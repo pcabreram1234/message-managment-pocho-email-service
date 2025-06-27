@@ -3,7 +3,7 @@ const { MessageConfig, MessageConfigModel } = require("./MessageCofing");
 const { USER_TABLE, User, UserModel } = require("./Users");
 const { FailedMessage, FailedMessageModel } = require("./FailedMessages");
 
-async function setupModesl(sequelize) {
+async function setupModels(sequelize) {
   User.init(UserModel, User.config(sequelize));
   MessageConfig.init(MessageConfigModel, MessageConfig.config(sequelize));
   FailedMessage.init(FailedMessageModel, FailedMessage.config(sequelize));
@@ -13,4 +13,4 @@ async function setupModesl(sequelize) {
   MessageConfig.associate(sequelize.models);
 }
 
-module.exports = { setupModesl };
+module.exports = { setupModels };
