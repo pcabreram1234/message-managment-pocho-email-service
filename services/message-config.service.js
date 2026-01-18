@@ -10,7 +10,9 @@ class MessageConfigService {
     const rta = await this.models.MessageConfig.findAll({
       where: {
         status: "pending",
-        scheduled_date: { [Op.lte]: new Date() }
+        scheduled_date: { [Op.lte]: new Date() },
+        MessageId: { [Op.not]: null },
+        // id: 761,
       },
       attributes: [
         "recipient",
@@ -18,7 +20,10 @@ class MessageConfigService {
         "MessageId",
         "scheduled_date",
         "id",
+        "UserId",
       ],
+      order: [["created_at", "ASC"]],
+      raw: true,
     });
     return rta;
   }
@@ -35,7 +40,8 @@ class MessageConfigService {
         status: "error",
         scheduled_date: {
           [Op.between]: [delay, now], // Rango entre el margen de atraso y la hora actual
-        }, attempts: { [Op.lt]: 3 }
+        },
+        attempts: { [Op.lt]: 3 },
       },
       attributes: [
         "recipient",

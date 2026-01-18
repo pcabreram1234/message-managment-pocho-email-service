@@ -2,17 +2,17 @@ const { Op } = require("sequelize");
 // const { initSequelize } = require("../libs/sequelize");
 
 class FailedMessageService {
-
   constructor(models) {
     this.models = models;
   }
   async findMessageWithErrors() {
     const d = new Date();
+    const retryLimit = new Date(d.getTime() + 20 * 60000);
     const rta = await this.models.FailedMessage.findAll({
       where: {
         status: { [Op.or]: ["Error", "Pending"] },
         next_retry_at: {
-          [Op.or]: [null, { [Op.lte]: [new Date(d.getTime() + (60000 * 20))] }],
+          [Op.or]: [null, { [Op.lte]: retryLimit }],
         },
         attempts: {
           [Op.lte]: 3,
@@ -57,7 +57,7 @@ class FailedMessageService {
           scheduled_date: scheduled_date,
           message_id: message_id,
         },
-      }
+      },
     );
     return rta;
   }
