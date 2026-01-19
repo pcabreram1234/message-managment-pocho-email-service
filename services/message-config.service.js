@@ -12,7 +12,7 @@ class MessageConfigService {
         status: "pending",
         scheduled_date: { [Op.lte]: new Date() },
         MessageId: { [Op.not]: null },
-        // id: 761,
+        id: 1809,
       },
       attributes: [
         "recipient",

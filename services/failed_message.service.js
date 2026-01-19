@@ -34,31 +34,28 @@ class FailedMessageService {
 
   async updateFailedMessage(data) {
     const {
-      scheduled_date,
       status,
       attempts,
       next_retry_at,
       last_attempt_at,
       error_message,
-      message_id,
-      recipient,
+      id,
     } = data;
-    const rta = await this.models.FailedMessage.update(
-      {
-        status: status,
-        attempts: attempts ?? null,
-        next_retry_at: next_retry_at ?? null,
-        last_attempt_at: last_attempt_at ?? null,
-        error_message: error_message ?? null,
+
+    const updateData = {};
+
+    if (status !== undefined) updateData.status = status;
+    if (attempts !== undefined) updateData.attempts = attempts;
+    if (next_retry_at !== undefined) updateData.next_retry_at = next_retry_at;
+    if (last_attempt_at !== undefined)
+      updateData.last_attempt_at = last_attempt_at;
+    if (error_message !== undefined) updateData.error_message = error_message;
+
+    const rta = await this.models.FailedMessage.update(updateData, {
+      where: {
+        message_id: id,
       },
-      {
-        where: {
-          recipient: recipient,
-          scheduled_date: scheduled_date,
-          message_id: message_id,
-        },
-      },
-    );
+    });
     return rta;
   }
 

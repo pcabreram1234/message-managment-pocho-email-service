@@ -80,6 +80,9 @@ const sendPendingMessages = async () => {
         };
         // console.log(bulkeMessageTosend);
 
+        const currentDate = new Date();
+        const nestAttemptDate = currentDate.getDate() + 1;
+
         await sendMessages.sendEmail(bulkeMessageTosend).then(async () => {
           await service
             .updateMessagePending(MessageId, "sended")
@@ -89,6 +92,16 @@ const sendPendingMessages = async () => {
                 message_id: MessageId,
                 scheduled_date: ScheduledDate,
                 recipient: bulkeMessageTosend?.recipient,
+              });
+            })
+            .catch(async (err) => {
+              await failedService.updateFailedMessage({
+                status: "Error",
+                attempts: 1,
+                next_retry_at: nestAttemptDate,
+                last_attempt_at: currentDate,
+                error_message: err,
+                id: MessageId,
               });
             });
         });
