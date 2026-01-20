@@ -228,4 +228,7 @@ $RECYCLE.BIN/
 # .zip Lambda file
 *.zip
 
+#Lambda layers for AWS Folder
+lambda
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,node,macos,linux,database
